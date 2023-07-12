@@ -15,9 +15,9 @@ public class Stadium {
     Timestamp stadiumCreatedAt;
 
     @Builder
-    public Stadium(int stadiumId, String stadiumName, Timestamp stadiumCreateAt) {
+    public Stadium(int stadiumId, String stadiumName, Timestamp stadiumCreatedAt) {
         this.stadiumId = stadiumId;
         this.stadiumName = stadiumName;
-        this.stadiumCreatedAt = stadiumCreateAt;
+        this.stadiumCreatedAt = stadiumCreatedAt;
     }
 }

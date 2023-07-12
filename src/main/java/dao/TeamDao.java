@@ -1,6 +1,7 @@
 package dao;
 
 import model.Player;
+import model.Team;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,72 +14,46 @@ public class TeamDao {
         this.connection = connection;
     }
 
-    // 팀 추가
-    //    int teamId; //pk
-    //    int stadiumId; //fk
-    //    String teamName;
-    //    Timestamp teamCreatedAt;
-    // 데이터베이스 : id  stadium_tb  name   created_at
-    public void insertTeam(int teamId, int stadiumId, String teamName) throws SQLException {
-        String query = "INSERT INTO team_tb (id, stadium_tb, name) VALUES (?, ?, ?)";
+
+    public void insertTeam(int stadiumId, String teamName) throws SQLException {
+        String query = "INSERT INTO team_tb (stadium_id, team_name, team_created_at) VALUES (?, ?, now())";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, teamId);
-            statement.setInt(2, stadiumId);
-            statement.setString(3, teamName);
+            //statement.setInt(1, teamId);
+            statement.setInt(1, stadiumId);
+            statement.setString(2, teamName);
             statement.executeUpdate();
         }
     }
 
     // 전체 팀 조회
-    public List<Player> getAllPlayers() throws SQLException {
-        List<Player> players = new ArrayList<>();
-        String query = "SELECT * FROM player_tb";
+    public List<Team> getAllTeams() throws SQLException {
+        List<Team> teams = new ArrayList<>();
+        String query = "SELECT * FROM team_tb";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             try(ResultSet resultSet = statement.executeQuery()){
                 while (resultSet.next()) {
-                    Player player = buildPlayerFromResultSet(resultSet);
-                    players.add(player);
+                    Team team = buildTeamFromResultSet(resultSet);
+                    teams.add(team);
                 }
             }
         }
-        return players;
+        return teams;
     }
 
-    // 선수 정보 수정
-//    public void updatePlayer(int playerId, int teamId, String playerName, String playerPosition) throws SQLException {
-//        String query = "UPDATE player_tb SET team_id = ?, name = ?, position = ? WHERE id = ?";
-//        try (PreparedStatement statement = connection.prepareStatement(query)) {
-//            statement.setInt(1, teamId);
-//            statement.setString(2, playerName);
-//            statement.setString(3, playerPosition);
-//            statement.setInt(4, playerId);
-//            statement.executeUpdate();
-//        }
-//    }
 
-    // 선수 퇴출
-//    public void deletePlayer(int playerId) throws SQLException {
-//        String query = "DELETE FROM player_tb WHERE id = ?";
-//        try (PreparedStatement statement = connection.prepareStatement(query)) {
-//            statement.setInt(1, playerId);
-//            statement.executeUpdate();
-//        }
-//    }
-
-    private Player buildPlayerFromResultSet(ResultSet resultSet) throws SQLException {
-        int playerId = resultSet.getInt("id");
+    // 트랜잭션 남기기
+    private Team buildTeamFromResultSet(ResultSet resultSet) throws SQLException {
         int teamId = resultSet.getInt("team_id");
-        String playerName = resultSet.getString("name");
-        String playerPosition = resultSet.getString("position");
-        Timestamp playerCreateAt = resultSet.getTimestamp("created_at");
+        int stadiumId = resultSet.getInt("stadium_id");
+        String teamName = resultSet.getString("team_name");
+        Timestamp teamCreatedAt = resultSet.getTimestamp("team_created_at");
 
 
-        return Player.builder()
-                .playerId(playerId)
+        return Team.builder()
                 .teamId(teamId)
-                .playerName(playerName)
-                .playerPosition(playerPosition)
-                .playerCreateAt(playerCreateAt)
+                .stadiumId(stadiumId)
+                .teamName(teamName)
+                .teamCreatedAt(teamCreatedAt)
                 .build();
     }
 }

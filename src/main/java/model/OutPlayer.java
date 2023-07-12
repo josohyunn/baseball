@@ -13,14 +13,14 @@ import java.sql.Timestamp;
 public class OutPlayer {
     int outPlayerId; //pk
     int playerId; //fk
-    String reason;
+    String outPlayerReason;
     Timestamp outPlayerCreatedAt;
 
     @Builder
-    public OutPlayer(int outPlayerId, int playerId, String reason, Timestamp outPlayerCreatedAt) {
+    public OutPlayer(int outPlayerId, int playerId, String outPlayerReason, Timestamp outPlayerCreatedAt) {
         this.outPlayerId = outPlayerId;
         this.playerId = playerId;
-        this.reason = reason;
+        this.outPlayerReason = outPlayerReason;
         this.outPlayerCreatedAt = outPlayerCreatedAt;
     }
 

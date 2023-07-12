@@ -16,10 +16,10 @@ public class Team {
     Timestamp teamCreatedAt;
 
     @Builder
-    public Team(int teamId, int stadiumId, String teamName, Timestamp teamCreateAt) {
+    public Team(int teamId, int stadiumId, String teamName, Timestamp teamCreatedAt) {
         this.teamId = teamId;
         this.stadiumId = stadiumId;
         this.teamName = teamName;
-        this.teamCreatedAt = teamCreateAt;
+        this.teamCreatedAt = teamCreatedAt;
     }
 }

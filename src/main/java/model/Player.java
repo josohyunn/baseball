@@ -16,12 +16,12 @@ public class Player { // teamId와 playerPosition은 다중 칼럼 유니크 제
     Timestamp playerCreatedAt;
 
     @Builder
-    public Player(int playerId, int teamId, String playerName, String playerPosition, Timestamp playerCreateAt) {
+    public Player(int playerId, int teamId, String playerName, String playerPosition, Timestamp playerCreatedAt) {
         this.playerId = playerId;
         this.teamId = teamId;
         this.playerName = playerName;
         this.playerPosition = playerPosition;
-        this.playerCreatedAt = playerCreateAt;
+        this.playerCreatedAt = playerCreatedAt;
     }
 
 }

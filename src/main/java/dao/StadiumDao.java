@@ -1,5 +1,8 @@
 package dao;
 
+import model.Player;
+import model.Stadium;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,45 +16,39 @@ public class StadiumDao {
     }
 
     // 야구장 생성
-    public void createStadium(int stadiumId, String stadiumName) throws SQLException {
-        String query = "INSERT INTO stadium_tb (id, name, create_at) VALUES (?, ?, now())";
+    public void createStadium(String stadiumName) throws SQLException {
+        String query = "INSERT INTO stadium_tb (stadium_name, stadium_created_at) VALUES (?, now())";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, stadiumId);
-            statement.setString(2, stadiumName);
-            statement.executeUpdate();
-        }
-    }
-
-    // 야구장 수정
-    public void updateStadium(int stadiumId, String stadiumName) throws SQLException {
-        String query = "UPDATE stadium_tb SET name = ?  WHERE id = ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            //statement.setInt(1, stadiumId);
             statement.setString(1, stadiumName);
-            statement.setInt(2, stadiumId);
             statement.executeUpdate();
         }
     }
 
-    // 야구장 삭제
-    public void deleteStadium(int stadiumId) throws SQLException {
-        String query = "DELETE FROM stadium_tb WHERE id = ?";
+    // 전체 야구장 목록보기
+    public List<Stadium> getAllStadiums() throws SQLException {
+        List<Stadium> stadiums = new ArrayList<>();
+        String query = "SELECT * FROM stadium_tb";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, stadiumId);
-            statement.executeUpdate();
+            try(ResultSet resultSet = statement.executeQuery()){
+                while (resultSet.next()) {
+                    Stadium stadium = buildStadiumFromResultSet(resultSet);
+                    stadiums.add(stadium);
+                }
+            }
         }
+        return stadiums;
     }
 
-//    private Account buildAccountFromResultSet(ResultSet resultSet) throws SQLException {
-//        int accountNumber = resultSet.getInt("account_number");
-//        String accountPassword = resultSet.getString("account_password");
-//        int accountBalance = resultSet.getInt("account_balance");
-//        Timestamp accountCreatedAt = resultSet.getTimestamp("account_created_at");
-//
-//        return Account.builder()
-//                .accountNumber(accountNumber)
-//                .accountPassword(accountPassword)
-//                .accountBalance(accountBalance)
-//                .accountCreatedAt(accountCreatedAt)
-//                .build();
-//    }
+    private Stadium buildStadiumFromResultSet(ResultSet resultSet) throws SQLException {
+        int stadiumId = resultSet.getInt("stadium_id");
+        String stadiumName = resultSet.getString("stadium_name");
+        Timestamp stadiumCreatedAt = resultSet.getTimestamp("stadium_created_at");
+
+        return Stadium.builder()
+                .stadiumId(stadiumId)
+                .stadiumName(stadiumName)
+                .stadiumCreatedAt(stadiumCreatedAt)
+                .build();
+    }
 }
