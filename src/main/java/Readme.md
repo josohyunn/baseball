@@ -6,49 +6,56 @@ USE baseball;
 ## stadium_tb
 
 CREATE TABLE `stadium_tb` (
-`id` int primary key auto_increment not null ,
-`name` varchar(10) DEFAULT NULL,
-created_at timestamp not null
+`stadium_id` int primary key auto_increment not null ,
+`stadium_name` varchar(10) DEFAULT NULL,
+`stadium_created_at` date not null
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-select * from stadium_tb;
-INSERT INTO stadium_tb VALUES (null,'사직야구장',now());
-INSERT INTO stadium_tb VALUES (null,'잠실야구장',now());
-INSERT INTO stadium_tb VALUES (null,'광주챔피언스필드',now());
+INSERT INTO stadium_tb VALUES (null,"사직야구장","1985-10-14");
+INSERT INTO stadium_tb VALUES (null,"잠실야구장","1980-04-17");
+INSERT INTO stadium_tb VALUES (null,"광주챔피언스필드","2014-03-08");
+
+drop table stadium_tb;
+drop table team_tb;
+drop table player_tb;
+drop table out_player_tb;
 
 select * from stadium_tb;
 
 ## team_tb
 
 CREATE TABLE `team_tb` (
-`id` int primary key auto_increment not null,
-`stadium_tb` int,
-`name` varchar(10) DEFAULT NULL,
-created_at timestamp not null,
-FOREIGN KEY (`stadium_tb`)
-REFERENCES `stadium_tb`(`id`)
+`team_id` int primary key auto_increment not null,
+`stadium_id` int,
+`team_name`  varchar(10) DEFAULT NULL,
+`team_created_at` date not null,
+FOREIGN KEY (`stadium_id`)
+REFERENCES `stadium_tb`(`stadium_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-INSERT INTO `team_tb` VALUES (null, 1,'롯데', now());
-INSERT INTO `team_tb` VALUES (null, 2,'LG', now());
-INSERT INTO `team_tb` VALUES (null, 3,'기아', now());
 
 select * from team_tb;
 
+INSERT INTO `team_tb` VALUES (null, 1,"롯데", "1975-05-06");
+INSERT INTO `team_tb` VALUES (null, 2,"LG", "1982-01-26" );
+INSERT INTO `team_tb` VALUES (null, 3,"기아", "1982-01-30");
+
+
 ## player_tb
 
+
 CREATE TABLE `player_tb` (
-`id` int primary key auto_increment not null ,
+`player_id` int primary key auto_increment not null ,
 `team_id` int DEFAULT NULL,
-`name` varchar(10) DEFAULT NULL,
-`position` varchar(10),
-`created_at` timestamp not null,
+`player_name` varchar(10) DEFAULT NULL,
+`player_position` varchar(10),
+`player_created_at` timestamp not null,
 FOREIGN KEY (`team_id`)
-REFERENCES `team_tb`(`id`)
+REFERENCES `team_tb`(`team_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- truncate table player_tb;
--- select * from player_tb;
+select * from player_tb;
+delete from player_tb where player_id=28;
+
 
 INSERT INTO player_tb VALUES (null, 1,'김민석', '중견수',now());
 INSERT INTO player_tb VALUES (null, 1,'윤동희', '우익수',now());
@@ -80,15 +87,16 @@ INSERT INTO player_tb VALUES (null, 3,'김선빈', '2루수',now());
 INSERT INTO player_tb VALUES (null, 3,'김태군', '포수',now());
 INSERT INTO player_tb VALUES (null, 3,'박찬호', '유격수',now());
 
+
 ## out_player_tb
 
 CREATE TABLE `out_player_tb` (
-`id` int primary key auto_increment not null ,
+`out_player_id` int primary key auto_increment not null ,
 `player_id` int,
-`reason` varchar(100) DEFAULT NULL,
-created_at timestamp not null,
+`out_player_reason` varchar(100) DEFAULT NULL,
+`out_player_created_at` timestamp not null,
 FOREIGN KEY (`player_id`)
-REFERENCES `player_tb`(`id`)
+REFERENCES `player_tb`(`player_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- select * from out_player_tb;
+select * from out_player_tb;
