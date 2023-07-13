@@ -11,10 +11,10 @@ import java.sql.Timestamp;
 @ToString
 
 public class OutPlayer {
-    int outPlayerId; //pk
-    int playerId; //fk
-    String outPlayerReason;
-    Timestamp outPlayerCreatedAt;
+    private int outPlayerId; //pk
+    private int playerId; //fk
+    private String outPlayerReason;
+    private Timestamp outPlayerCreatedAt;
 
     @Builder
     public OutPlayer(int outPlayerId, int playerId, String outPlayerReason, Timestamp outPlayerCreatedAt) {

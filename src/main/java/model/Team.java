@@ -10,10 +10,10 @@ import java.sql.Timestamp;
 @Getter
 @ToString
 public class Team {
-    int teamId; //pk
-    int stadiumId; //fk
-    String teamName;
-    Timestamp teamCreatedAt;
+    private int teamId; //pk
+    private int stadiumId; //fk
+    private String teamName;
+    private Timestamp teamCreatedAt;
 
     @Builder
     public Team(int teamId, int stadiumId, String teamName, Timestamp teamCreatedAt) {

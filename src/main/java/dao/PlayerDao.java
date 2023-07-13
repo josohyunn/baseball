@@ -33,7 +33,7 @@ public class PlayerDao {
     // 전체 선수 조회
     public List<Player> getAllPlayers(int teamId) throws SQLException {
         List<Player> players = new ArrayList<>();
-        String query = "SELECT * FROM player_tb WHERE team_id = ?";
+        String query = "SELECT * FROM player_tb WHERE team_id = ? ORDER BY player_id ASC";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, teamId);
             try(ResultSet resultSet = statement.executeQuery()){
@@ -48,8 +48,7 @@ public class PlayerDao {
 
      //선수 퇴출
     public void deletePlayer(int playerId) throws SQLException {
-        //String query = "UPDATE player_tb SET team_id=null, player_name=null, player_position=null, player_created_at=null WHERE player_id=?";
-        String query = "UPDATE player_tb SET team_id=null, player_name=null, player_position=null WHERE player_id=?";
+        String query = "UPDATE player_tb SET team_id=null WHERE player_id=?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, playerId);
             statement.executeUpdate();
