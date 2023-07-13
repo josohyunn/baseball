@@ -52,10 +52,9 @@ public class BaseBallApp {
                 try {
                     stadiumDao.createStadium(bodyParts[1]);
                     System.out.println("야구장 등록이 완료되었습니다.");
+                    bool=false;
                 } catch (SQLException e) {
                     System.out.println("야구장 등록 실패");
-                } finally {
-                    bool = false;
                 }
 
             } else if (parts[0].equals("야구장목록")) { // 2. 전체 야구장 목록 보기
@@ -66,10 +65,9 @@ public class BaseBallApp {
                     dtos.forEach(dto -> {
                         System.out.println(dto.getStadiumId()+") " +dto.getStadiumName());
                     });
+                    bool=false;
                 } catch (SQLException e) {
                     System.out.println("야구장 목록 불러오기 실패");
-                }finally {
-                    bool = false;
                 }
 
                 //  팀등록?stadiumId=1&name=NC
@@ -85,7 +83,7 @@ public class BaseBallApp {
                 } catch (SQLException e) {
                     System.out.println("팀 등록 실패");
                 } finally {
-                    bool = false;
+
                 }
 
             } else if(parts[0].equals("팀목록")) { // 4. 전체 팀 목록 Stadium 정보를 조인해서 출력하기(TeamRespDTO 필요)
@@ -98,10 +96,11 @@ public class BaseBallApp {
                 } catch (SQLException e) {
                     System.out.println("팀 목록 불러오기 실패");
                 }finally {
-                    bool = false;
+
                 }
 
             } else if(parts[0].equals("선수등록")) { // 5. 선수 등록
+                List<Player> dtos = null;
                 String[] bodyParts = parts[1].split("&");
                 String[] teamParts = bodyParts[0].split("=");
                 String[] nameParts = bodyParts[1].split("=");
@@ -110,14 +109,14 @@ public class BaseBallApp {
                 String playerName = nameParts[1];
                 String playerPosition = positionParts[1];
                 try {
-                    playerDao.insertPlayer(teamId, playerName, playerPosition);
-                    System.out.println("선수 등록이 완료되었습니다.");
+                    if(playerDao.insertPlayer(teamId, playerName, playerPosition) == 1)
+                        System.out.println("선수 등록이 완료되었습니다.");
+                    else {
+                        System.out.println("이미 존재하는 선수입니다.");
+                    }
                 } catch (SQLException e) {
                     System.out.println("선수 등록 실패");
-                } finally {
-                    bool = false;
                 }
-
 
             } else if(parts[0].equals("선수목록")) { // 6. 팀별 선수 목록(team_id는 출력하지 않아도 된다)
                 List<Player> dtos = null;
@@ -136,7 +135,7 @@ public class BaseBallApp {
                 } catch (Exception e) {
                     System.out.println("선수 목록 불러오기 실패");
                 }finally {
-                    bool = false;
+
                 }
 
             } else if(parts[0].equals("퇴출등록")) { // 7. 선수 퇴출 등록(두 개 이상의 write문이 실행되야 한다.
@@ -147,6 +146,7 @@ public class BaseBallApp {
                 String[] reasonParts = bodyParts[1].split("=");
                 int playerId = Integer.parseInt(playerParts[1]);
                 String outPlayerReason = reasonParts[1];
+
                 try {
                     outPlayerDao.insertOutPlayer(playerId, outPlayerReason);
                     System.out.println("퇴출 선수 등록이 완료되었습니다.");
@@ -154,23 +154,33 @@ public class BaseBallApp {
                 } catch (SQLException e) {
                     System.out.println("퇴출 선수 등록 실패");
                 } finally {
-                    bool = false;
+
                 }
 
             } else if(parts[0].equals("퇴출목록")) { // 8. 선수 퇴출 목록(OutPlayerRespDTO에 담아서 출력한다)
+                List<OutPlayer> dtos = null;
+                try {
+                    dtos = outPlayerDao.getAllOutPlayers();
+                    dtos.forEach(dto -> {
+                        System.out.println(dto.getPlayerId()+"번 선수: " + dto.getOutPlayerReason());
+                    });
+                } catch (Exception e) {
+                    System.out.println("선수 목록 불러오기 실패");
+                }finally {
 
+                }
             } else if(parts[0].equals("포지션별목록")) { // 9. 포지션별 팀 야구 선수 페이지(PositionRespDTO에 값을 담아서 콘솔에 출력한다.)
 
             } else if(request.startsWith("종료")) { // 0. 종료
-
+                bool = false;
             }
             else {
                 System.out.println("입력 형식에 맞게 입력해주세요.");
             }
 
 
-        //}
 
+        //}
 //
 //        try {
 //            stadiumDao.createStadium("테스트");

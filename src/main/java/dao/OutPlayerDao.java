@@ -27,7 +27,7 @@ public class OutPlayerDao {
     }
 
     // 전체 퇴출 선수 조회
-    public List<OutPlayer> getAllPlayers() throws SQLException {
+    public List<OutPlayer> getAllOutPlayers() throws SQLException {
         List<OutPlayer> outplayers = new ArrayList<>();
         String query = "SELECT * FROM out_player_tb";
         try (PreparedStatement statement = connection.prepareStatement(query)) {

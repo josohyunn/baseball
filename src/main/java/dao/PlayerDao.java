@@ -15,7 +15,7 @@ public class PlayerDao {
     }
 
     // 선수 추가
-    public void insertPlayer(int teamId, String playerName, String playerPosition) throws SQLException {
+    public int insertPlayer(int teamId, String playerName, String playerPosition) throws SQLException {
         String query = "INSERT INTO player_tb (team_id, player_name, player_position, player_created_at) VALUES (?, ?, ?, now())";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             //statement.setInt(1, playerId);
@@ -23,6 +23,9 @@ public class PlayerDao {
             statement.setString(2, playerName);
             statement.setString(3, playerPosition);
             statement.executeUpdate();
+            return 1;
+        } catch (Exception e) {
+            return -1; // 중복선수 존재
         }
     }
 
@@ -45,7 +48,8 @@ public class PlayerDao {
 
      //선수 퇴출
     public void deletePlayer(int playerId) throws SQLException {
-        String query = "DELETE FROM player_tb WHERE player_id = ?";
+        //String query = "UPDATE player_tb SET team_id=null, player_name=null, player_position=null, player_created_at=null WHERE player_id=?";
+        String query = "UPDATE player_tb SET team_id=null, player_name=null, player_position=null WHERE player_id=?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setInt(1, playerId);
             statement.executeUpdate();
