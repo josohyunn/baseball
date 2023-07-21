@@ -22,3 +22,40 @@ public class DBConnection {
         return null;
     }
 }
+
+//teardown까지 포함한 DBConnection
+//package db;
+//
+//        import org.junit.jupiter.api.Test;
+//
+//        import java.io.BufferedReader;
+//        import java.io.FileReader;
+//        import java.sql.Connection;
+//        import java.sql.PreparedStatement;
+//        import java.sql.Statement;
+//
+//public class DBInitTest {
+//
+//    @Test
+//    public void init_test(){
+//        DBInit dbInit = new DBInit();
+//        String sql = dbInit.readTeardown();
+//
+//
+//        try {
+//            Connection connection = DBConnection.getInstance();
+//            Statement statement = connection.createStatement();
+//            String[] queries = sql.split(";");
+//
+//            for (String query : queries) {
+//                if (!query.trim().isEmpty()) {
+//                    statement.executeUpdate(query);
+//                }
+//            }
+//
+//            statement.close();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+//}
